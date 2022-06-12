@@ -1,8 +1,10 @@
 import "@styles/index.scss";
-import { WavefrontModel } from "./WavefrontModel";
+import { Grid } from "./Grid";
 
-const a = new WavefrontModel("/public/cube.obj");
-
-a.getVertex().then(() => {
-  console.log(a.buffer);
-});
+const $canvas = <HTMLCanvasElement>document.querySelector("#grid");
+const gl = $canvas.getContext("webgl");
+if (gl) {
+  new Grid(gl);
+} else {
+  console.error("Your browser have not suport to webgl");
+}
