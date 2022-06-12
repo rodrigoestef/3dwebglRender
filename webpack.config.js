@@ -13,18 +13,34 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.s[ac]ss$/i,
+        use: ["style-loader", "css-loader", "sass-loader"],
+      },
+      {
         test: /\.(js|ts)$/,
         exclude: /(node_modules|bower_components)/,
         use: {
           loader: "babel-loader",
           options: {
             presets: ["@babel/preset-env", "@babel/preset-typescript"],
+            plugins: [
+              [
+                "module-resolver",
+                {
+                  alias: {
+                    "@styles": ["./styles"],
+                  },
+                },
+              ],
+            ],
           },
         },
       },
     ],
   },
-  plugins: [new HtmlWebpackPlugin()],
+  plugins: [
+    new HtmlWebpackPlugin({ template: path.resolve(__dirname, "index.html") }),
+  ],
   devServer: {
     static: {
       directory: path.join(__dirname, "public"),
