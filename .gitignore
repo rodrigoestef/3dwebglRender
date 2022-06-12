@@ -1,0 +1,4 @@
+node_modules
+dist
+src/antlr/*
+!src/antlr/WavefrontOBJ.g4
