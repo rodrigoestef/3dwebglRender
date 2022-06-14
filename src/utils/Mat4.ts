@@ -10,13 +10,15 @@ export class Mat4 {
   ) {
     const a = [...matriz1];
     const b = [...matriz2];
-    for (let j = 0; j <= 8; j++) {
-      for (let i = 0; i <= 8; i++) {
-        result[i + j] =
-          a[4 * (j % 4) + 0] * b[(i % 4) + 0] +
-          a[4 * (j % 4) + 1] * b[(i % 4) + 4] +
-          a[4 * (j % 4) + 2] * b[(i % 4) + 8] +
-          a[4 * (j % 4) + 3] * b[(i % 4) + 12];
+    let x = 0;
+    for (let j = 0; j < 4; j++) {
+      for (let i = 0; i < 4; i++) {
+        result[x] =
+          a[i * 4] * b[j * 4] +
+          a[i * 4 + 1] * b[j * 4 + 1] +
+          a[i * 4 + 2] * b[j * 4 + 2] +
+          a[i * 4 + 3] * b[j * 4 + 3];
+        x++;
       }
     }
   }
