@@ -22,7 +22,7 @@ export class Mat4 {
     near: number,
     far: number
   ) {
-    // w = -z
+    // w = z
     // x1 = wi/he*x0*f/w
     // y1 = y0*f/w
     // z1 = a/w + b
@@ -33,7 +33,7 @@ export class Mat4 {
     // near + far = b*(far -near) | b = (near+far)/(far-near)
 
     // z*w  = x*z0 +y
-    // z = -x + y/w
+    // z = x + y/w
 
     const b = (near + far) / (far - near);
     const a = -near * (1 + b);
@@ -43,13 +43,13 @@ export class Mat4 {
 
     // cotan*wperh, 0    , 0,  0
     // 0          , cotan, 0,  0
-    // 0          , 0    , -b, -1
+    // 0          , 0    , b,  1
     // 0          , 0    , a,  0
 
     perspective[0] = cotan * wperh;
     perspective[5] = cotan;
-    perspective[10] = -b;
-    perspective[11] = -1;
+    perspective[10] = b;
+    perspective[11] = 1;
     perspective[14] = a;
     perspective[15] = 0;
     return perspective;

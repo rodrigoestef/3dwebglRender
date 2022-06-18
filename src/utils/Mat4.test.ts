@@ -29,7 +29,7 @@ describe("it will test mat4 class", () => {
     const result = Mat4.getUnitMatriz();
     vector[0] = 1;
     vector[1] = 1;
-    vector[2] = -100;
+    vector[2] = 100;
     vector[3] = 1;
     const perspective = Mat4.createPerpective(90, 1, 0.01, 100);
     Mat4.multiMatriz(result, vector, perspective);
@@ -37,7 +37,7 @@ describe("it will test mat4 class", () => {
     result.forEach((_, i) => (result[i] = result[i] / w));
     expect(Math.abs(result[2] - 1) < 0.1).toBe(true);
 
-    vector[2] = -0.01;
+    vector[2] = 0.01;
     Mat4.multiMatriz(result, vector, perspective);
     w = result[3];
     result.forEach((_, i) => (result[i] = result[i] / w));
