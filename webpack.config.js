@@ -28,8 +28,8 @@ module.exports = {
                 "module-resolver",
                 {
                   alias: {
-                    "@styles": ["./styles"],
-                    "@utils": ["./src/utils"],
+                    "@styles": "./styles",
+                    "@utils": "./src/utils",
                   },
                 },
               ],
