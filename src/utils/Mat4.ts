@@ -3,6 +3,19 @@ export class Mat4 {
     return [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
   }
 
+  public static translate(result: number[], vector: number[]) {
+    // 1,0,0,0
+    // 0,1,0,0
+    // 0,0,1,0
+    // a,b,c,1
+
+    const unit = Mat4.getUnitMatriz();
+    unit[12] = vector[0];
+    unit[13] = vector[1];
+    unit[14] = vector[2];
+    Mat4.multiMatriz(result, result, unit);
+  }
+
   public static createPerpective(
     angle: number,
     wperh: number,

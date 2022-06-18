@@ -43,4 +43,10 @@ describe("it will test mat4 class", () => {
     result.forEach((_, i) => (result[i] = result[i] / w));
     expect(Math.abs(result[2] + 1) < 0.1).toBe(true);
   });
+
+  it("must translate", () => {
+    const unit = Mat4.getUnitMatriz();
+    Mat4.translate(unit, [2, 2, 2]);
+    expect(unit[12]).toBe(2);
+  });
 });
