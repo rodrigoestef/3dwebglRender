@@ -1,5 +1,9 @@
+import { Mat4 } from "@utils/Mat4";
+
 export class Grid {
   bufferData: number[] = [-1, 0, 0, 1, 0, 0, 0, 1, 0];
+  perspectiveMatriz = Mat4.createPerpective(90, 1, 0.01, 10);
+  cameraMatriz = Mat4.getUnitMatriz();
   program: WebGLProgram;
   buffer: WebGLBuffer;
 
@@ -10,6 +14,27 @@ export class Grid {
       this.gl.ARRAY_BUFFER,
       new Float32Array(this.bufferData),
       this.gl.STATIC_DRAW
+    );
+  }
+
+  bindCameraUniform() {
+    const cameraLocation = this.gl.getUniformLocation(
+      this.program,
+      "uCameraMat"
+    );
+    const perspectiveLocation = this.gl.getUniformLocation(
+      this.program,
+      "uPerspectiveMat"
+    );
+    this.gl.uniformMatrix4fv(
+      cameraLocation,
+      false,
+      new Float32Array(this.cameraMatriz)
+    );
+    this.gl.uniformMatrix4fv(
+      perspectiveLocation,
+      false,
+      new Float32Array(this.perspectiveMatriz)
     );
   }
 
