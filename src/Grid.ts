@@ -118,6 +118,10 @@ export class Grid {
       this.program,
       "aVertexPosition"
     );
+    const aNormalPositionLocation = this.gl.getAttribLocation(
+      this.program,
+      "aNormalPosition"
+    );
     this.gl.vertexAttribPointer(
       aVertexPositionLocation,
       3,
@@ -126,11 +130,20 @@ export class Grid {
       8 * Float32Array.BYTES_PER_ELEMENT,
       0
     );
+    this.gl.vertexAttribPointer(
+      aNormalPositionLocation,
+      3,
+      this.gl.FLOAT,
+      false,
+      8 * Float32Array.BYTES_PER_ELEMENT,
+      5 * Float32Array.BYTES_PER_ELEMENT
+    );
     this.gl.enableVertexAttribArray(aVertexPositionLocation);
+    this.gl.enableVertexAttribArray(aNormalPositionLocation);
   }
 
   draw() {
-    this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+    this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
     for (const model of this.models) {
       const buffer = model.getBuffer();
       this.bindBuffer(buffer);
@@ -148,6 +161,7 @@ export class Grid {
 
   private constructor(private gl: WebGLRenderingContext) {
     this.gl.clearColor(0, 0, 0, 1);
+    this.gl.enable(this.gl.DEPTH_TEST);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT);
     const program = this.gl.createProgram();
     const buffer = this.gl.createBuffer();
