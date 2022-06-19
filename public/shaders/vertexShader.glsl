@@ -9,6 +9,6 @@ uniform mat4 uRotationModelMat;
 varying vec4 fragNormalPosition;
 
 void main(){
-    fragNormalPosition = uLocationModelMat*uRotationModelMat*vec4(aNormalPosition,1.0);
+    fragNormalPosition = uRotationModelMat*vec4(aNormalPosition,1.0);
     gl_Position = uPerspectiveMat*uCameraMat*uLocationModelMat*uRotationModelMat*vec4(aVertexPosition,1.0);
 }
