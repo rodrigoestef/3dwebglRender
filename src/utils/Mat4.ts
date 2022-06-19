@@ -3,6 +3,41 @@ export class Mat4 {
     return [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
   }
 
+  public static rotation(result: number[], angle: number, axis: boolean[]) {
+    const rad = (Math.PI * angle) / 180;
+    const sin = Math.sin(rad);
+    const cos = Math.cos(rad);
+
+    const multi = Mat4.getUnitMatriz();
+
+    const [A, B, G] = axis;
+
+    //  cos,sin
+    // -sin, cos
+
+    if (G) {
+      multi[0] = cos;
+      multi[1] = sin;
+      multi[4] = -sin;
+      multi[5] = cos;
+    }
+
+    if (B) {
+      multi[0] = cos;
+      multi[2] = sin;
+      multi[8] = -sin;
+      multi[10] = cos;
+    }
+
+    if (A) {
+      multi[5] = cos;
+      multi[6] = sin;
+      multi[9] = -sin;
+      multi[10] = cos;
+    }
+    Mat4.multiMatriz(result, result, multi);
+  }
+
   public static translate(result: number[], vector: number[]) {
     // 1,0,0,0
     // 0,1,0,0

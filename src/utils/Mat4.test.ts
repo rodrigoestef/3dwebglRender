@@ -49,4 +49,20 @@ describe("it will test mat4 class", () => {
     Mat4.translate(unit, [2, 2, 2]);
     expect(unit[12]).toBe(2);
   });
+
+  it("must rotate", () => {
+    const zAxis = Mat4.getUnitMatriz();
+
+    Mat4.rotation(zAxis, 90, [false, false, true]);
+    expect(zAxis[1]).toBe(1);
+
+    const yAxis = Mat4.getUnitMatriz();
+
+    Mat4.rotation(yAxis, 90, [false, true, false]);
+    expect(yAxis[2]).toBe(1);
+
+    const xAxis = Mat4.getUnitMatriz();
+    Mat4.rotation(xAxis, 90, [true, false, false]);
+    expect(xAxis[0]).toBe(1);
+  });
 });

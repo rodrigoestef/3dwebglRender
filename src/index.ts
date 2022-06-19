@@ -23,7 +23,13 @@ const init = async () => {
     grid.attachModel(monkey);
     Mat4.translate(grid.cameraMatriz, [0, 0, 4]);
     grid.bindCameraUniform();
-    grid.draw();
+    const render = () => {
+      grid.draw();
+      requestAnimationFrame((a) => {
+        render();
+      });
+    };
+    render();
   } catch (error) {
     console.error(error);
   }
