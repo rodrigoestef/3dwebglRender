@@ -4,6 +4,7 @@ import { Model } from "@utils/Model";
 export class MonkeyModel extends Model {
   constructor() {
     super("/public/monkey.obj");
+    Mat4.translate(this.location, [-1.5, 0, 4]);
   }
 
   getUniformPosition(): {

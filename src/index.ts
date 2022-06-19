@@ -17,12 +17,8 @@ const init = async () => {
     const monkey = new MonkeyModel();
     await cube.getVertex();
     await monkey.getVertex();
-    Mat4.translate(cube.location, [1.5, 0, 0]);
-    Mat4.translate(monkey.location, [-1.5, 0, 0]);
     grid.attachModel(cube);
     grid.attachModel(monkey);
-    Mat4.translate(grid.cameraMatriz, [0, 0, 4]);
-    grid.bindCameraUniform();
     const render = () => {
       grid.draw();
       requestAnimationFrame((a) => {

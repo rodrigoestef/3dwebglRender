@@ -156,6 +156,7 @@ export class Grid {
   static async createInstance(gl: WebGLRenderingContext) {
     const c = new Grid(gl);
     await c.initProgram();
+    c.bindCameraUniform();
     return c;
   }
 
