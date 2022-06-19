@@ -2,7 +2,7 @@ import { Mat4 } from "@utils/Mat4";
 
 export interface IModel {
   getBuffer(): number[];
-  getgetUniformPosition(): {
+  getUniformPosition(): {
     modelLocationUniform: number[];
     modelRotationUniform: number[];
   };
@@ -58,7 +58,7 @@ export class Grid {
       "uRotationModelMat"
     );
     const { modelLocationUniform, modelRotationUniform } =
-      model.getgetUniformPosition();
+      model.getUniformPosition();
 
     this.gl.uniformMatrix4fv(
       rotationlocation,

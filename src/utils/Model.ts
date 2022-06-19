@@ -8,7 +8,7 @@ export class Model extends WavefrontModel implements IModel {
   getBuffer(): number[] {
     return this.buffer;
   }
-  getgetUniformPosition(): {
+  getUniformPosition(): {
     modelLocationUniform: number[];
     modelRotationUniform: number[];
   } {
