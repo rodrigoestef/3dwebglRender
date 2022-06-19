@@ -1,6 +1,8 @@
 import "@styles/index.scss";
 import { Mat4 } from "@utils/Mat4";
 import { Grid } from "./Grid";
+import { CubeModel } from "./models/Cube";
+import { MonkeyModel } from "./models/Monkey";
 
 const $canvas = <HTMLCanvasElement>document.querySelector("#grid");
 const gl = $canvas.getContext("webgl");
@@ -11,9 +13,15 @@ const init = async () => {
     }
 
     const grid = await Grid.createInstance(gl);
-    grid.bindBuffer();
-    grid.bindAttributes();
-    Mat4.translate(grid.cameraMatriz, [0, -0.2, 2]);
+    const cube = new CubeModel();
+    const monkey = new MonkeyModel();
+    await cube.getVertex();
+    await monkey.getVertex();
+    Mat4.translate(cube.location, [1.5, 0, 0]);
+    Mat4.translate(monkey.location, [-1.5, 0, 0]);
+    grid.attachModel(cube);
+    grid.attachModel(monkey);
+    Mat4.translate(grid.cameraMatriz, [0, 0, 4]);
     grid.bindCameraUniform();
     grid.draw();
   } catch (error) {

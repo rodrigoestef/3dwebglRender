@@ -1,18 +1,28 @@
 import { Mat4 } from "@utils/Mat4";
 
+export interface IModel {
+  getBuffer(): number[];
+  getgetUniformPosition(): {
+    modelLocationUniform: number[];
+    modelRotationUniform: number[];
+  };
+}
+
 export class Grid {
-  bufferData: number[] = [-1, 0, 0, 1, 0, 0, 0, 1, 0];
   perspectiveMatriz = Mat4.createPerpective(90, 1, 0.01, 10);
   cameraMatriz = Mat4.getUnitMatriz();
   program: WebGLProgram;
   buffer: WebGLBuffer;
+  models: IModel[] = [];
 
-  bindBuffer() {
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.buffer);
+  attachModel(model: IModel) {
+    this.models.push(model);
+  }
 
+  bindBuffer(data: number[]) {
     this.gl.bufferData(
       this.gl.ARRAY_BUFFER,
-      new Float32Array(this.bufferData),
+      new Float32Array(data),
       this.gl.STATIC_DRAW
     );
   }
@@ -35,6 +45,30 @@ export class Grid {
       perspectiveLocation,
       false,
       new Float32Array(this.perspectiveMatriz)
+    );
+  }
+
+  bindModelUniforms(model: IModel) {
+    const locationlocation = this.gl.getUniformLocation(
+      this.program,
+      "uLocationModelMat"
+    );
+    const rotationlocation = this.gl.getUniformLocation(
+      this.program,
+      "uRotationModelMat"
+    );
+    const { modelLocationUniform, modelRotationUniform } =
+      model.getgetUniformPosition();
+
+    this.gl.uniformMatrix4fv(
+      rotationlocation,
+      false,
+      new Float32Array(modelRotationUniform)
+    );
+    this.gl.uniformMatrix4fv(
+      locationlocation,
+      false,
+      new Float32Array(modelLocationUniform)
     );
   }
 
@@ -76,6 +110,7 @@ export class Grid {
       throw new Error("cannot link program");
     }
     this.gl.useProgram(this.program);
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.buffer);
   }
 
   bindAttributes() {
@@ -88,7 +123,7 @@ export class Grid {
       3,
       this.gl.FLOAT,
       false,
-      3 * Float32Array.BYTES_PER_ELEMENT,
+      8 * Float32Array.BYTES_PER_ELEMENT,
       0
     );
     this.gl.enableVertexAttribArray(aVertexPositionLocation);
@@ -96,7 +131,13 @@ export class Grid {
 
   draw() {
     this.gl.clear(this.gl.COLOR_BUFFER_BIT);
-    this.gl.drawArrays(this.gl.TRIANGLES, 0, 3);
+    for (const model of this.models) {
+      const buffer = model.getBuffer();
+      this.bindBuffer(buffer);
+      this.bindAttributes();
+      this.bindModelUniforms(model);
+      this.gl.drawArrays(this.gl.TRIANGLES, 0, buffer.length / 8);
+    }
   }
 
   static async createInstance(gl: WebGLRenderingContext) {
