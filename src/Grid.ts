@@ -2,6 +2,7 @@ import { Mat4 } from "@utils/Mat4";
 
 export interface IModel {
   getBuffer(): number[];
+  getTexture(): HTMLImageElement | undefined;
   getUniformPosition(): {
     modelLocationUniform: number[];
     modelRotationUniform: number[];
@@ -13,6 +14,7 @@ export class Grid {
   cameraMatriz = Mat4.getUnitMatriz();
   program: WebGLProgram;
   buffer: WebGLBuffer;
+  texture: WebGLTexture;
   models: IModel[] = [];
 
   attachModel(model: IModel) {
@@ -111,6 +113,48 @@ export class Grid {
     }
     this.gl.useProgram(this.program);
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.buffer);
+    this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
+  }
+
+  bindTexture(image?: HTMLImageElement) {
+    if (!image) {
+      this.gl.texImage2D(
+        this.gl.TEXTURE_2D,
+        0,
+        this.gl.RGBA,
+        1,
+        1,
+        0,
+        this.gl.RGBA,
+        this.gl.UNSIGNED_BYTE,
+        new Uint8Array([255, 255, 255, 255])
+      );
+    } else {
+      this.gl.texImage2D(
+        this.gl.TEXTURE_2D,
+        0,
+        this.gl.RGBA,
+        this.gl.RGBA,
+        this.gl.UNSIGNED_BYTE,
+        image
+      );
+    }
+    // this.gl.generateMipmap(this.gl.TEXTURE_2D);
+    this.gl.texParameteri(
+      this.gl.TEXTURE_2D,
+      this.gl.TEXTURE_WRAP_S,
+      this.gl.REPEAT
+    );
+    this.gl.texParameteri(
+      this.gl.TEXTURE_2D,
+      this.gl.TEXTURE_WRAP_T,
+      this.gl.REPEAT
+    );
+    this.gl.texParameteri(
+      this.gl.TEXTURE_2D,
+      this.gl.TEXTURE_MIN_FILTER,
+      this.gl.LINEAR
+    );
   }
 
   bindAttributes() {
@@ -122,6 +166,10 @@ export class Grid {
       this.program,
       "aNormalPosition"
     );
+    const aTexturePositionLocation = this.gl.getAttribLocation(
+      this.program,
+      "aTexturePosition"
+    );
     this.gl.vertexAttribPointer(
       aVertexPositionLocation,
       3,
@@ -129,6 +177,14 @@ export class Grid {
       false,
       8 * Float32Array.BYTES_PER_ELEMENT,
       0
+    );
+    this.gl.vertexAttribPointer(
+      aTexturePositionLocation,
+      2,
+      this.gl.FLOAT,
+      false,
+      8 * Float32Array.BYTES_PER_ELEMENT,
+      3 * Float32Array.BYTES_PER_ELEMENT
     );
     this.gl.vertexAttribPointer(
       aNormalPositionLocation,
@@ -139,6 +195,7 @@ export class Grid {
       5 * Float32Array.BYTES_PER_ELEMENT
     );
     this.gl.enableVertexAttribArray(aVertexPositionLocation);
+    this.gl.enableVertexAttribArray(aTexturePositionLocation);
     this.gl.enableVertexAttribArray(aNormalPositionLocation);
   }
 
@@ -148,6 +205,7 @@ export class Grid {
       const buffer = model.getBuffer();
       this.bindBuffer(buffer);
       this.bindAttributes();
+      this.bindTexture(model.getTexture());
       this.bindModelUniforms(model);
       this.gl.drawArrays(this.gl.TRIANGLES, 0, buffer.length / 8);
     }
@@ -164,17 +222,21 @@ export class Grid {
     this.gl.clearColor(0, 0, 0, 1);
     this.gl.enable(this.gl.DEPTH_TEST);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+    const texture = this.gl.createTexture();
     const program = this.gl.createProgram();
     const buffer = this.gl.createBuffer();
     if (!program) {
       throw new Error("Cannot create program");
     }
-
+    if (!texture) {
+      throw new Error("Cannot create texture");
+    }
     if (!buffer) {
       throw new Error("Cannot create buffer");
     }
 
     this.buffer = buffer;
     this.program = program;
+    this.texture = texture;
   }
 }
