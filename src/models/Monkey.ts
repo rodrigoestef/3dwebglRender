@@ -5,6 +5,8 @@ export class MonkeyModel extends Model {
   constructor() {
     super("/public/monkey.obj");
     Mat4.translate(this.location, [-1.5, 0, 4]);
+    this.texture = new Image();
+    this.texture.src = "public/images/monkey.png";
   }
 
   getUniformPosition(): {
