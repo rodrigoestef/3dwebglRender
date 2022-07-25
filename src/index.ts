@@ -1,5 +1,4 @@
 import "@styles/index.scss";
-import { Mat4 } from "@utils/Mat4";
 import { Grid } from "./Grid";
 import { CubeModel } from "./models/Cube";
 import { MonkeyModel } from "./models/Monkey";
@@ -13,8 +12,8 @@ const init = async () => {
     }
 
     const grid = await Grid.createInstance(gl);
-    const cube = new CubeModel();
-    const monkey = new MonkeyModel();
+    const cube = new CubeModel(grid);
+    const monkey = new MonkeyModel(grid);
     await cube.getVertex();
     await monkey.getVertex();
     grid.attachModel(cube);
