@@ -1,10 +1,30 @@
-body {
-    background-color: aqua;
-    text-align: center;
+:root{
+    --grid-size-x: 800px;
+    --grid-size-y: 800px;
+}
+*{
+    margin:0px;
 }
 
+body {
+    background-color: aqua;
+}
+.constainer{   
+    height: 100vh; 
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    & p{
+        color: white;
+        position: absolute;
+        top:  calc(0.5*(100vh - var(--grid-size-y)));
+        right: calc(0.5*(100vw - var(--grid-size-x)));
+    }
+}
 .principal-grid{
     background-color: #fff;
-    width: 800px;
-    height: 800px;
+    width: var(--grid-size-x);
+    height: var(--grid-size-y);
+    position: relative;
 }

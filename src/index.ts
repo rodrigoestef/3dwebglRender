@@ -4,7 +4,9 @@ import { CubeModel } from "./models/Cube";
 import { MonkeyModel } from "./models/Monkey";
 
 const $canvas = <HTMLCanvasElement>document.querySelector("#grid");
+const $fpsIndicator = <HTMLElement>document.querySelector("#fpsIndicator");
 const gl = $canvas.getContext("webgl");
+let timer = 0;
 const init = async () => {
   try {
     if (!gl) {
@@ -21,6 +23,9 @@ const init = async () => {
     const render = () => {
       grid.draw();
       requestAnimationFrame((a) => {
+        a = a / 1000;
+        $fpsIndicator.innerText = (1 / (a - timer)).toFixed(2);
+        timer = a;
         render();
       });
     };
