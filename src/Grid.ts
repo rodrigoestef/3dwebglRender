@@ -1,5 +1,6 @@
 import { Mat4 } from "@utils/Mat4";
 import { IBindTexture } from "@utils/Model";
+import { IGetResoursesMatriz } from "@events/IgetResoursesMatriz";
 
 export interface IModel {
   getBuffer(): number[];
@@ -10,8 +11,8 @@ export interface IModel {
   };
 }
 
-export class Grid implements IBindTexture {
-  perspectiveMatriz = Mat4.createPerpective(90, 1, 0.01, 10);
+export class Grid implements IBindTexture, IGetResoursesMatriz {
+  perspectiveMatriz = Mat4.createPerpective(90, 1, 0.01, 100);
   cameraMatriz = Mat4.getUnitMatriz();
   program: WebGLProgram;
   buffer: WebGLBuffer;
@@ -226,6 +227,7 @@ export class Grid implements IBindTexture {
       this.bindAttributes();
       this.bindSampler(texture);
       this.bindModelUniforms(model);
+      this.bindCameraUniform();
       this.gl.drawArrays(this.gl.TRIANGLES, 0, buffer.length / 8);
     }
   }
@@ -254,6 +256,9 @@ export class Grid implements IBindTexture {
     this.buffer = buffer;
     this.program = program;
     this.activateTexture = this.gl.TEXTURE0;
+  }
+  getCameraMatriz(): number[] {
+    return this.cameraMatriz;
   }
 
   getDafaultTexture(): number {

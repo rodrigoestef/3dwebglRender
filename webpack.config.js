@@ -30,6 +30,7 @@ module.exports = {
                   alias: {
                     "@styles": "./styles",
                     "@utils": "./src/utils",
+                    "@events": "./src/events",
                   },
                 },
               ],
