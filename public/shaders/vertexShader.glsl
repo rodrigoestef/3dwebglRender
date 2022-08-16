@@ -9,9 +9,11 @@ uniform mat4 uLocationModelMat;
 uniform mat4 uRotationModelMat;
 varying vec4 fragNormalPosition;
 varying vec2 fragTexturePosition;
+varying vec4 fragVertexPosition;
 
 void main(){
     fragTexturePosition = aTexturePosition;
     fragNormalPosition = uRotationModelMat*vec4(aNormalPosition,1.0);
+    fragVertexPosition = uLocationModelMat*uRotationModelMat*vec4(aVertexPosition,1.0);
     gl_Position = uPerspectiveMat*uCameraMat*uLocationModelMat*uRotationModelMat*vec4(aVertexPosition,1.0);
 }
